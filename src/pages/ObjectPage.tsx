@@ -1,6 +1,5 @@
 import { useParams, Navigate, useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Topbar } from '@/components/Topbar'
 import { ObjectTable } from '@/components/ObjectTable'
 import { Kanban } from '@/components/Kanban'
 import { Button } from '@/components/ui/Button'
@@ -291,23 +290,6 @@ export function ObjectPage() {
 
   return (
     <>
-      <Topbar
-        title={activeView ? activeView.name : schema.plural}
-        subtitle={
-          activeView
-            ? `${schema.plural} · ${activeView.layout === 'board' ? `grouped by ${activeView.groupBy}` : 'table'}`
-            : schema.description
-        }
-        icon={activeView?.icon ?? schema.icon}
-        iconColor={activeView?.color ?? schema.color}
-        actions={
-          <Button variant="primary" size="sm">
-            <Icon name="Plus" size={14} strokeWidth={2.5} />
-            New {schema.name.toLowerCase()}
-          </Button>
-        }
-      />
-
       {newVarProposals.length > 0 && (
         <NewVariableBanner proposals={newVarProposals} schema={schema} />
       )}
@@ -454,6 +436,11 @@ export function ObjectPage() {
           >
             <Icon name="Sparkles" size={13} />
             Properties
+          </Button>
+          <div className="h-5 w-px bg-ink-200" />
+          <Button variant="primary" size="sm">
+            <Icon name="Plus" size={13} strokeWidth={2.5} />
+            New {schema.name.toLowerCase()}
           </Button>
         </div>
       </div>

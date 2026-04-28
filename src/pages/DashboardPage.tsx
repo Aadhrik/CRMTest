@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Topbar } from '@/components/Topbar'
 import { Icon } from '@/components/ui/Icon'
 import { useCrmStore } from '@/store/useCrmStore'
 
@@ -13,12 +12,16 @@ export function DashboardPage() {
 
   return (
     <>
-      <Topbar
-        title="Good afternoon, Aadhrik"
-        subtitle="Here's what's happening across your workspace."
-      />
       <div className="flex-1 overflow-auto">
         <div className="mx-auto w-full max-w-5xl px-8 py-8">
+          <div className="mb-8">
+            <h1 className="text-[20px] font-semibold tracking-tight text-ink-900">
+              Good afternoon, Aadhrik
+            </h1>
+            <p className="mt-1 text-[13px] text-ink-500">
+              Here's what's happening across your CRM.
+            </p>
+          </div>
           {/* Objects */}
           <div className="mb-3 flex items-baseline justify-between">
             <div>
