@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #ffffff;
+    --surface: #fafafa;
+    --border: #e4e4e7;
+    --border-soft: #f4f4f5;
+    --text: #0a0a0b;
+    --text-muted: #71717a;
+    --accent: #5b5bf5;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink-900 font-sans;
+    font-feature-settings:
+      'cv02' on,
+      'cv03' on,
+      'cv04' on,
+      'cv11' on;
+    letter-spacing: -0.01em;
+  }
+
+  /* Headings — tight tracking */
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.02em;
+  }
+
+  /* Scrollbar — minimal */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *:hover > ::-webkit-scrollbar-thumb,
+  *:focus-within > ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    background-clip: padding-box;
+  }
+
+  /* Selection */
+  ::selection {
+    background: #dde0ff;
+    color: #18181b;
+  }
+
+  /* Focus ring — subtle, accent-tinted */
+  :focus-visible {
+    outline: 2px solid #5b5bf5;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .hairline {
+    @apply border border-ink-200;
+  }
+  .hairline-b {
+    @apply border-b border-ink-200;
+  }
+  .hairline-t {
+    @apply border-t border-ink-200;
+  }
+  .hairline-r {
+    @apply border-r border-ink-200;
+  }
+  .hairline-l {
+    @apply border-l border-ink-200;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
