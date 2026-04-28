@@ -26,7 +26,7 @@ const TYPE_META: globalThis.Record<
   pick_list: {
     label: 'Pick list',
     icon: 'List',
-    hint: 'One of a set of options — required for board views',
+    hint: 'One of a set of options — required for pipeline views',
   },
   yes_no: { label: 'Yes / No', icon: 'ToggleRight', hint: 'Boolean' },
   date: { label: 'Date', icon: 'Calendar', hint: 'ISO date' },
@@ -247,7 +247,7 @@ function VariableRow({
           {v.type === 'pick_list' && (
             <Field
               label="Options"
-              hint="Drag order matters in board view — leftmost columns first."
+              hint="Drag order matters in pipeline view — leftmost columns first."
             >
               <ul className="flex flex-col gap-1.5">
                 {(v.options ?? [])

@@ -88,7 +88,7 @@ export function DashboardPage() {
                     Pinned views
                   </h2>
                   <p className="mt-0.5 text-[11.5px] text-ink-500">
-                    Saved lenses over your records — board by stage, table
+                    Saved lenses over your records — pipeline by stage, table
                     filtered by tier, whatever you need.
                   </p>
                 </div>
@@ -128,7 +128,7 @@ export function DashboardPage() {
                             size={11}
                             className="text-ink-400"
                           />
-                          <span className="text-ink-400 capitalize">{v.layout}</span>
+                          <span className="text-ink-400 capitalize">{v.layout === 'board' ? 'Pipeline' : v.layout}</span>
                         </span>
                         <span className="inline-flex items-center gap-1">
                           <Icon name="Rows3" size={11} className="text-ink-400" />
