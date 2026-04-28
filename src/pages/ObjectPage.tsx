@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/Input'
 import { Icon } from '@/components/ui/Icon'
 import { useCrmStore } from '@/store/useCrmStore'
 import { SchemaEditorPanel } from '@/components/SchemaEditorPanel'
+import { CreatePipelineModal } from '@/components/CreatePipelineModal'
 import { NewVariableBanner } from '@/components/NewVariableBanner'
 import { cn } from '@/lib/utils'
 import type {
@@ -174,6 +175,7 @@ export function ObjectPage() {
 
   const [search, setSearch] = useState('')
   const [schemaEditorOpen, setSchemaEditorOpen] = useState(false)
+  const [createPipelineOpen, setCreatePipelineOpen] = useState(false)
 
   // Filter state
   const [filterBarOpen, setFilterBarOpen] = useState(false)
@@ -357,10 +359,9 @@ export function ObjectPage() {
             }}
           />
           <LayoutToggle
-            label="Board"
+            label="Pipeline"
             icon="LayoutGrid"
             active={layout === 'board'}
-            disabled={pickListVars.length === 0}
             onClick={() => {
               if (activeViewId) updateView(activeViewId, { layout: 'board', groupBy: groupByKey ?? pickListVars[0]?.key })
               else setLocalLayout('board')
@@ -368,23 +369,35 @@ export function ObjectPage() {
           />
         </div>
 
-        {/* GroupBy picker — only when Board */}
+        {/* Pipeline picker — only when Pipeline layout */}
         {layout === 'board' && (
           <div className="flex items-center gap-1.5">
-            <span className="text-[11.5px] text-ink-500">Group by</span>
+            <span className="text-[11.5px] text-ink-500">Choose Pipeline</span>
             <select
               value={groupByKey ?? ''}
               onChange={(e) => {
-                if (activeViewId) updateView(activeViewId, { groupBy: e.target.value })
-                else setLocalGroupByKey(e.target.value)
+                const v = e.target.value
+                if (v === '__create_pipeline__') {
+                  setCreatePipelineOpen(true)
+                  return
+                }
+                if (activeViewId) updateView(activeViewId, { groupBy: v })
+                else setLocalGroupByKey(v)
               }}
               className="h-7 rounded-md border border-ink-200 bg-white px-2 text-[12.5px] font-medium text-ink-800 hover:border-ink-300 focus:border-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
             >
+              {pickListVars.length === 0 && (
+                <option value="" disabled>
+                  No pipelines yet
+                </option>
+              )}
               {pickListVars.map((v) => (
                 <option key={v.key} value={v.key}>
                   {v.name}
                 </option>
               ))}
+              <option disabled>──────────</option>
+              <option value="__create_pipeline__">+ Create New Pipeline</option>
             </select>
           </div>
         )}
@@ -533,7 +546,7 @@ export function ObjectPage() {
         </div>
       )}
 
-      {/* Body — Table or Board */}
+      {/* Body — Table or Pipeline */}
       {layout === 'table' ? (
         <ObjectTable schema={schema} records={filtered} />
       ) : groupByVar && groupByVar.type === 'pick_list' ? (
@@ -545,20 +558,19 @@ export function ObjectPage() {
               <Icon name="LayoutGrid" size={16} />
             </div>
             <div className="text-[13px] font-semibold text-ink-900">
-              Add a pick-list property to use Board view
+              No pipelines yet
             </div>
             <p className="mt-1 text-[12px] text-ink-500">
-              Board view groups records by a pick-list property. This object
-              doesn't have one yet.
+              A pipeline groups records into columns by a single property — like Stage or Status.
             </p>
             <Button
               variant="primary"
               size="sm"
               className="mt-3"
-              onClick={() => setSchemaEditorOpen(true)}
+              onClick={() => setCreatePipelineOpen(true)}
             >
               <Icon name="Plus" size={13} strokeWidth={2.5} />
-              Add property
+              Create pipeline
             </Button>
           </div>
         </div>
@@ -568,6 +580,16 @@ export function ObjectPage() {
         open={schemaEditorOpen}
         onClose={() => setSchemaEditorOpen(false)}
         schema={schema}
+      />
+
+      <CreatePipelineModal
+        open={createPipelineOpen}
+        onClose={() => setCreatePipelineOpen(false)}
+        schema={schema}
+        onCreate={(_variableKey, viewId) => {
+          searchParams.set('view', viewId)
+          setSearchParams(searchParams, { replace: true })
+        }}
       />
     </>
   )
@@ -690,7 +712,7 @@ function LayoutToggle({
     <button
       onClick={onClick}
       disabled={disabled}
-      title={disabled ? 'Needs a pick-list property' : label}
+      title={disabled ? 'Pipeline needs a pick-list property' : label}
       className={cn(
         'flex h-7 items-center gap-1.5 rounded-md px-2 text-[12.5px] font-medium transition-colors',
         active
